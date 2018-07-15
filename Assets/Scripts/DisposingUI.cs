@@ -24,7 +24,7 @@ public class DisposingUI : MonoBehaviour {
 	public void OnClearClicked()
 	{
 		InitializeButtonColor();
-		editorInstance.ClearDisposedObject();
+		NoticeUI.AddToViewport(2);
 	}
 
 	public void OnEmptyClicked()
