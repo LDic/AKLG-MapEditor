@@ -3,10 +3,13 @@
 public class Tile : MonoBehaviour {
 
 	public GameObject disposedObject;
+
 	private Renderer renderer;
 	private MapEditorManager editorInstance;
-
 	private Quaternion spawnQuaternion = new Quaternion(0f, 90f, 90f, 1f);
+
+	public int disposedObjectIndex;     // 0 : null. 1부터 시작.
+	private string[] objectNames = {"", "Wall(Clone)", "Character(Clone)", "Enemy1(Clone)"};
 
 	void Start()
 	{
@@ -16,10 +19,18 @@ public class Tile : MonoBehaviour {
 
 	private void DisposeObject()
 	{
-		if(disposedObject != null) {Destroy(disposedObject);}
+		if(disposedObject != null)
+		{
+			Destroy(disposedObject);
+			disposedObjectIndex = 0;
+		}
 		if(editorInstance.SelectedObject != null)
 		{
 			disposedObject = (GameObject)Instantiate(editorInstance.SelectedObject, transform.position, spawnQuaternion);
+			for(int i = 0; i < objectNames.Length; i++)
+			{
+				if(disposedObject.name == objectNames[i]) {disposedObjectIndex = i;}
+			}
 		}
 	}
 

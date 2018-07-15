@@ -97,13 +97,22 @@ public class MapEditorManager : MonoBehaviour {
 	}
 
 	// Exporting to CSV file.
-	private List<string[]> rowData = new List<string[]>();
+	//private List<string[]> rowData = new List<string[]>();
+	
 	public void Save()
 	{
-		string[] rowDataTemp = new string[3];
-		rowDataTemp[0] = "Tile";
-		rowDataTemp[1] = "Object";
-		rowDataTemp[2] = "Number";
+		List<string[]> rowData = new List<string[]>();
+		string[] rowDataTemp = new string[Width*Height + 2];
+		
+		rowDataTemp[0] = Width.ToString();
+		rowDataTemp[1] = Height.ToString();
+
+		int rowDataIndex = 2;
+		foreach(Tile tile in spawnedTiles)
+		{
+			rowDataTemp[rowDataIndex] = tile.disposedObjectIndex.ToString();
+			rowDataIndex++;
+		}
 		rowData.Add(rowDataTemp);
 		
 		string[][] output = new string[rowData.Count][];
@@ -119,10 +128,11 @@ public class MapEditorManager : MonoBehaviour {
 		{
 			sb.AppendLine(string.Join(delimiter, output[index]));
 		}
-		
+
 		string filePath = Application.dataPath+"/"+"Saved_data.csv";
-		StreamWriter outStream = File.CreateText(filePath);
-		outStream.WriteLine(sb);
-		outStream.Close();
+		using(StreamWriter outStream = new StreamWriter(filePath, true))
+		{
+			outStream.Write(sb);
+		}
 	}
 }
