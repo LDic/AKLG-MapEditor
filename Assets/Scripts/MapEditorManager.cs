@@ -46,6 +46,8 @@ public class MapEditorManager : MonoBehaviour {
 
 	void Start()
 	{
+		Width = 8; Height = 8;
+		CreateTiles(Width, Height);
 	}
 
 	public void SetSize()
@@ -81,6 +83,7 @@ public class MapEditorManager : MonoBehaviour {
 
 	public void CreateTiles(int width, int height)
 	{
+		ClearDisposedObject();
 		DestroyTiles();
 		spawnedTiles = new Tile[height, width];
 

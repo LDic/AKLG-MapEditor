@@ -2,7 +2,6 @@
 
 public class MainUI : MonoBehaviour {
 
-	private int width, height;
 	private MapEditorManager editorInstance;
 
 	void Start()
@@ -12,14 +11,11 @@ public class MainUI : MonoBehaviour {
 
 	public void OnCreateClicked()
 	{
-		editorInstance.SetSize();
-		width = editorInstance.Width;
-		height = editorInstance.Height;
-		editorInstance.CreateTiles(width, height);
+		NoticeUI.AddToViewport(0);
 	}
 
 	public void OnExportClicked()
 	{
-		editorInstance.Save();
+		NoticeUI.AddToViewport(1);
 	}
 }
