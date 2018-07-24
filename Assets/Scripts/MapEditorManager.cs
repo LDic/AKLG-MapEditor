@@ -5,16 +5,17 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System;
+using UnityEditor;
 
 public class MapEditorManager : MonoBehaviour {
 
-	public static MapEditorManager instance;
+	public static MapEditorManager Instance;
 
-	[Header("Spawn Object")]
-	public Tile tilePrefab;
-	public GameObject wallPrefab;
+	[Header("Spawn")]
+	public TileUI tileUI;
+	/*public GameObject wallPrefab;
 	public GameObject characterPrefab;
-	public GameObject enemy1Prefab;
+	public GameObject enemy1Prefab;*/
 
 	[Header("Text")]
 	public Text widthText;
@@ -22,32 +23,32 @@ public class MapEditorManager : MonoBehaviour {
 	public int Width {get; set;}
 	public int Height {get; set;}
 
-	[Header("Color")]
-	public Color normalColor;
-	public Color hoverColor;
-
 	// private Variables
-	private Tile[,] spawnedTiles;
-	private GameObject selectedObject;
-	public GameObject SelectedObject
+	private TilePrefab spawnedTiles;
+	private GameObject selectedObject;	//삭제 대기
+	public GameObject SelectedObject	//삭제 대기
 	{
 		get{return selectedObject;}
 		set{selectedObject = value;}
 	}
 
+	[Header("Selected Information")]
+	public Sprite selectedSpriteImage;					// 선택된 이미지
+	public int selectedTypeIndex, selectedItemIndex;	// 선택된 이미지의 유형, 해당 유형에서의 인덱스
+
 	void Awake()
 	{
-		if(instance != null)
+		if(Instance != null)
 		{
 			Debug.LogError("There's another MapEditorManager!");
 		}
-		instance = this;
+		Instance = this;
 	}
 
 	void Start()
 	{
-		Width = 8; Height = 8;
-		CreateTiles(Width, Height);
+		Width = 5; Height = 5;
+		//CreateTiles(Width, Height);
 	}
 
 	public void SetSize()
@@ -59,6 +60,7 @@ public class MapEditorManager : MonoBehaviour {
 		else {Height = int.Parse(heightText.text);}
 	}
 
+	/*
 	public void ClearDisposedObject()
 	{
 		if(spawnedTiles != null)
@@ -79,11 +81,11 @@ public class MapEditorManager : MonoBehaviour {
 				Destroy(tile.gameObject);
 			}
 		}
-	}
+	}*/
 
 	public void CreateTiles(int width, int height)
 	{
-		ClearDisposedObject();
+		/*ClearDisposedObject();
 		DestroyTiles();
 		spawnedTiles = new Tile[height, width];
 
@@ -91,9 +93,11 @@ public class MapEditorManager : MonoBehaviour {
 		{
 			for(int widthIndex = 0; widthIndex < width; widthIndex++)
 			{
-				spawnedTiles[heightIndex, widthIndex] = Instantiate(tilePrefab, new Vector3(0f, 0f, (float)heightIndex) + new Vector3((float)widthIndex, 0f), Quaternion.identity);
+				spawnedTiles[heightIndex, widthIndex] = Instantiate(tilePrefab, new Vector3(tileSpawnOffset.x, 0f, (float)heightIndex) + new Vector3((float)widthIndex, 0f, tileSpawnOffset.z), Quaternion.identity, tileSpawnScreen);
 			}
-		}
+		}*/
+		tileUI.CreateTiles(width, height);
+
 	}
 
 	// Exporting to CSV file.
@@ -108,11 +112,13 @@ public class MapEditorManager : MonoBehaviour {
 		rowDataTemp[1] = Height.ToString();
 
 		int rowDataIndex = 2;
-		foreach(Tile tile in spawnedTiles)
+		/*
+		foreach(TilePrefab tile in spawnedTiles)
 		{
 			rowDataTemp[rowDataIndex] = tile.disposedObjectIndex.ToString();
 			rowDataIndex++;
 		}
+		*/
 		rowData.Add(rowDataTemp);
 		
 		string[][] output = new string[rowData.Count][];
@@ -134,5 +140,8 @@ public class MapEditorManager : MonoBehaviour {
 		{
 			outStream.Write(sb);
 		}
+
+
+		//string test = EditorUtility.OpenFilePanel("Saving Data", Application.dataPath, "csv");
 	}
 }

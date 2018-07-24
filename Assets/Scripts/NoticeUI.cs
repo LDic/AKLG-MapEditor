@@ -10,7 +10,7 @@ public class NoticeUI : MonoBehaviour {
 
 	void Start()
 	{
-		editorInstance = MapEditorManager.instance;
+		editorInstance = MapEditorManager.Instance;
 		createPanel = transform.Find("CreatePanel").gameObject;
 		exportPanel = transform.Find("ExportPanel").gameObject;
 		clearPanel = transform.Find("ClearPanel").gameObject;
@@ -60,7 +60,7 @@ public class NoticeUI : MonoBehaviour {
 
 	public void OnClearClicked()
 	{
-		editorInstance.ClearDisposedObject();
+		//editorInstance.ClearDisposedObject();
 		ClearUI();
 	}
 
