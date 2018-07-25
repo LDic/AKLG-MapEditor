@@ -11,27 +11,23 @@ public class DisposingUI : MonoBehaviour {
 	private MapEditorManager editorInstance;
 
 	[Header("Type Button")]
-	public GameObject[] typePanels;	// 0 : tile, 1 : offTile, 2 : entity, 3 : event
+	public GameObject[] typePanels;	// 0 : tile, 1 : offTile, 2 : item, 3 : entity, 4 : event
 
 	[Header("Button")]
 	public Button[] buttonList;	// 삭제 대기
-
-	private GameObject selectedObject;
 
 	void Start()
 	{
 		editorInstance = MapEditorManager.Instance;
 
-		// 임시 초기화
+		// Initialize
 		itemNumber = new int[typePanels.Length];
 		for(int i = 0; i < itemNumber.Length; i++)
 		{
-			itemNumber[i] = i+5;
+			itemNumber[i] = editorInstance.GetSpriteImageDataLength(i) + 2;	// 초기화, 빈 칸 버튼 + 실제 이미지 버튼
 		}
 
 		CreateDisposingUI();
-
-		//disposingItemList[0][2].SetSpriteImage(test);
 	}
 
 	public void CreateDisposingUI()
@@ -46,7 +42,9 @@ public class DisposingUI : MonoBehaviour {
 				disposingItemList[i][j] = Instantiate(disposingItem, typePanels[i].transform);
 				disposingItemList[i][j].typeIndex = i;
 				disposingItemList[i][j].itemIndex = j;
-				disposingItemList[i][j].transform.Translate(new Vector3( (j%5)*80, disposingItemYOffset - (j/5)*80) );
+				disposingItemList[i][j].transform.Translate(new Vector3((j%5)*80, disposingItemYOffset - (j/5)*80));
+				// 0, 1은 초기화, 빈 칸이므로 이미지 적용에서 제외
+				if(j >= 2) {disposingItemList[i][j].SetSpriteImage(editorInstance.GetSpriteImageData(i, j-2));}
 			}
 		}
 	}
@@ -66,39 +64,7 @@ public class DisposingUI : MonoBehaviour {
 		NoticeUI.AddToViewport(2);
 	}
 
-	/*
-	public void OnEmptyClicked()
-	{
-		InitializeButtonColor();
-		buttonList[1].image.color = Color.yellow;
-		editorInstance.SelectedObject = null;
-		selectedObject = null;
-	}
 
-	public void OnWallClicked()
-	{
-		InitializeButtonColor();
-		buttonList[2].image.color = Color.yellow;
-		editorInstance.SelectedObject = editorInstance.wallPrefab;
-		DisplaySelectedObject();
-	}
-
-	public void OnCharacterClicked()
-	{
-		InitializeButtonColor();
-		buttonList[3].image.color = Color.yellow;
-		editorInstance.SelectedObject = editorInstance.characterPrefab;
-		DisplaySelectedObject();
-
-	}
-
-	public void OnEnemy1Clicked()
-	{
-		InitializeButtonColor();
-		buttonList[4].image.color = Color.yellow;
-		editorInstance.SelectedObject = editorInstance.enemy1Prefab;
-		DisplaySelectedObject();
-	}
-	*/
+	
 }
 

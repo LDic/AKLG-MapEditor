@@ -12,7 +12,6 @@ public class ItemPrefab : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		editorInstance = MapEditorManager.Instance;
-		//itemSpriteImage = gameObject.GetComponent<Image>().sprite;
 	}
 
 	public void SelectItem()
@@ -22,12 +21,10 @@ public class ItemPrefab : MonoBehaviour {
 		editorInstance.selectedSpriteImage = itemSpriteImage;
 	}
 
-	public void SetSpriteImage(Sprite spriteImage, Texture2D texture)
+	public void SetSpriteImage(Sprite spriteImage)
 	{
 		itemSpriteImage = spriteImage;
-		gameObject.GetComponent<Image>().sprite = Sprite.Create(texture, new Rect(0f, 0f, 256f, 256f), Vector2.zero);
-		Debug.Log(gameObject.GetComponent<Image>().sprite);
+		gameObject.GetComponent<Image>().sprite = spriteImage;
 	}
-
 	
 }
