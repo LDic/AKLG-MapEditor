@@ -4,20 +4,21 @@ using UnityEngine.UI;
 
 public class TilePrefab : MonoBehaviour {
 
-	public Image[] images;	// 0 : tile, 1 : offTile, 2 : item, 3 : entity, 4 : event
+	public Image[] images;	// 0 : tile, 1 : offTile, 2 : entity
 	public int[] disposedItems;
 	private MapEditorManager editorInstance;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		editorInstance = MapEditorManager.Instance;
 		disposedItems = new int[images.Length];
 		ClearAllImages();
 	}
 
-	public void ClearImage(int itemIndex)
+	public void ClearImage(int typeIndex)
 	{
-		images[itemIndex].sprite = null;
+		images[typeIndex].sprite = null;
+		images[typeIndex].gameObject.SetActive(false);
 	}
 
 	public void ClearAllImages()
@@ -25,7 +26,6 @@ public class TilePrefab : MonoBehaviour {
 		for(int i = 0; i < images.Length; i++)
 		{
 			ClearImage(i);
-			images[i].gameObject.SetActive(false);
 		}
 	}
 
@@ -46,7 +46,6 @@ public class TilePrefab : MonoBehaviour {
 	{
 		if(Input.GetMouseButton(0))
 			DisposeImage();
-
 	}
 
 }

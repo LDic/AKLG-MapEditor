@@ -19,6 +19,11 @@ public class ItemPrefab : MonoBehaviour {
 		editorInstance.selectedItemIndex = itemIndex;
 		editorInstance.selectedTypeIndex = typeIndex;
 		editorInstance.selectedSpriteImage = itemSpriteImage;
+		// 초기화 버튼일 시 안내 창 띄움
+		if(itemIndex == -1)
+		{
+			NoticeUI.AddToViewport(2);
+		}
 	}
 
 	public void SetSpriteImage(Sprite spriteImage)

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class NoticeUI : MonoBehaviour {
 
-	private MapEditorManager editorInstance;
+	private static MapEditorManager editorInstance;
 	private static GameObject createPanel;
 	private static GameObject exportPanel;
 	private static GameObject clearPanel;
@@ -36,6 +36,10 @@ public class NoticeUI : MonoBehaviour {
 			exportPanel.SetActive(false);
 			clearPanel.SetActive(true);
 		}
+		if(index == 3)
+		{
+			editorInstance.LoadMap();
+		}
 	}
 
 	public void ClearUI()
@@ -60,7 +64,7 @@ public class NoticeUI : MonoBehaviour {
 
 	public void OnClearClicked()
 	{
-		//editorInstance.ClearDisposedObject();
+		editorInstance.tileUI.ClearDisposedImages(editorInstance.selectedTypeIndex);
 		ClearUI();
 	}
 

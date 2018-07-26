@@ -24,7 +24,6 @@ public class MapEditorManager : MonoBehaviour {
 	public int Height {get; set;}
 
 	// private Variables
-	private TilePrefab spawnedTiles;
 	private Sprite[][] spriteImageData;				// 폴더로부터 가져온 이미지파일. 0 : Tile, 1 : Off Tile, etc.
 
 	[Header("Selected Information")]
@@ -108,49 +107,52 @@ public class MapEditorManager : MonoBehaviour {
 		return tex;
 	}
 
-	
+
 	// Exporting to CSV file.
-	//private List<string[]> rowData = new List<string[]>();
-	
 	public void Save()
 	{
-		List<string[]> rowData = new List<string[]>();
-		string[] rowDataTemp = new string[Width*Height + 2];
-		
-		rowDataTemp[0] = Width.ToString();
-		rowDataTemp[1] = Height.ToString();
-
-		int rowDataIndex = 2;
-		/*
-		foreach(TilePrefab tile in spawnedTiles)
+		string saveFilePath = EditorUtility.SaveFilePanel("Save csv file", "", "Saved_data.csv", "csv");
+		if(saveFilePath.Length > 0)
 		{
-			rowDataTemp[rowDataIndex] = tile.disposedObjectIndex.ToString();
-			rowDataIndex++;
-		}
-		*/
-		rowData.Add(rowDataTemp);
-		
-		string[][] output = new string[rowData.Count][];
-		for(int i = 0; i < output.Length; i++)
-		{
-			output[i] = rowData[i];
-		}
+			using(StreamWriter outStream = new StreamWriter(saveFilePath))
+			{
+				outStream.WriteLine(Width.ToString() + "," + Height.ToString());
 
-		int length = output.GetLength(0);
-		string delimiter = ",";
-		StringBuilder sb = new StringBuilder();
-		for(int index = 0; index < length; index++)
-		{
-			sb.AppendLine(string.Join(delimiter, output[index]));
+				string[][] fileData = tileUI.GetSpawnedTileData();
+				for(int i = 0; i < fileData.Length; i++)
+				{
+					for(int j = 0; j < fileData[i].Length - 1; j++)
+					{
+						outStream.Write(fileData[i][j] + ",");
+					}
+					outStream.WriteLine(fileData[i][fileData[i].Length - 1]);
+				}
+			}
 		}
-
-		string filePath = Application.dataPath+"/"+"Saved_data.csv";
-		using(StreamWriter outStream = new StreamWriter(filePath, true))
-		{
-			outStream.Write(sb);
-		}
-
-
-		//string test = EditorUtility.OpenFilePanel("Saving Data", Application.dataPath, "csv");
 	}
+
+	// Loading Data
+	public void LoadMap()
+	{
+		string loadFilePath = EditorUtility.OpenFilePanel("Load csv file", "", "csv");
+
+		string[] readData = File.ReadAllLines(loadFilePath);	// 0 : 맵 크기. 1~ : tile의 데이터.
+		int widthSize = readData[0].ToCharArray()[0] - 48;
+		int heightSize = readData[0].ToCharArray()[2] - 48;
+
+		Width = widthSize; Height = heightSize;
+
+		// Create Tiles
+		tileUI.CreateTiles(widthSize, heightSize);
+
+		for(int i = 1; i < readData.Length; i++)	// readData의 인덱스 1 부터 tile 데이터가 시작되므로 0은 제외.
+		{
+			string[] temp = readData[i].Split(',');
+			for(int j = 0; j < temp.Length; j++)
+			{
+				tileUI.SetSpawnedTileData(j, i-1, temp[j], spriteImageData);
+			}
+		}
+	}
+
 }
