@@ -1,11 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System;
-using UnityEditor;
+using System.Runtime.InteropServices;
 
 public class MapEditorManager : MonoBehaviour {
 
@@ -28,7 +24,8 @@ public class MapEditorManager : MonoBehaviour {
 
 	[Header("Selected Information")]
 	public Sprite selectedSpriteImage;					// 선택된 이미지
-	public int selectedTypeIndex, selectedItemIndex;	// 선택된 이미지의 유형, 해당 유형에서의 인덱스
+	public int selectedTypeIndex, selectedItemIndex;    // 선택된 이미지의 유형, 해당 유형에서의 인덱스
+
 
 	void Awake()
 	{
@@ -111,7 +108,8 @@ public class MapEditorManager : MonoBehaviour {
 	// Exporting to CSV file.
 	public void Save()
 	{
-		string saveFilePath = EditorUtility.SaveFilePanel("Save csv file", "", "Saved_data.csv", "csv");
+		//string saveFilePath = UnityEditor.EditorUtility.SaveFilePanel("Save csv file", "", "Saved_data.csv", "csv");
+		string saveFilePath = Application.dataPath+"/save.csv";
 		if(saveFilePath.Length > 0)
 		{
 			using(StreamWriter outStream = new StreamWriter(saveFilePath))
@@ -129,12 +127,16 @@ public class MapEditorManager : MonoBehaviour {
 				}
 			}
 		}
+		
 	}
 
 	// Loading Data
 	public void LoadMap()
 	{
-		string loadFilePath = EditorUtility.OpenFilePanel("Load csv file", "", "csv");
+	/*
+		string loadFilePath = UnityEditor.EditorUtility.OpenFilePanel("Load csv file", "", "csv");
+		if(loadFilePath.Length == 0)
+			return;
 
 		string[] readData = File.ReadAllLines(loadFilePath);	// 0 : 맵 크기. 1~ : tile의 데이터.
 		int widthSize = readData[0].ToCharArray()[0] - 48;
@@ -153,6 +155,7 @@ public class MapEditorManager : MonoBehaviour {
 				tileUI.SetSpawnedTileData(j, i-1, temp[j], spriteImageData);
 			}
 		}
+		*/
 	}
 
 }
