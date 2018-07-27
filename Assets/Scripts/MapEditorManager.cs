@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
 public class MapEditorManager : MonoBehaviour {
@@ -9,9 +10,6 @@ public class MapEditorManager : MonoBehaviour {
 
 	[Header("Spawn")]
 	public TileUI tileUI;
-	/*public GameObject wallPrefab;
-	public GameObject characterPrefab;
-	public GameObject enemy1Prefab;*/
 
 	[Header("Text")]
 	public Text widthText;
@@ -71,8 +69,8 @@ public class MapEditorManager : MonoBehaviour {
 	/** Save texture data from folder */
 	public void BringTextureData()
 	{
-		string[] filePathList = Directory.GetDirectories(Application.dataPath + "/Textures/");
-		spriteImageData = new Sprite[Directory.GetDirectories(Application.dataPath+"/Textures/").Length][];
+		string[] filePathList = Directory.GetDirectories(UnityEngine.Application.dataPath + "/Textures/");
+		spriteImageData = new Sprite[Directory.GetDirectories(UnityEngine.Application.dataPath+"/Textures/").Length][];
 
 		for(int i = 0; i < filePathList.Length; i++)
 		{
@@ -88,7 +86,6 @@ public class MapEditorManager : MonoBehaviour {
 				}
 			}
 		}
-
 	}
 	private Texture2D GetTextureFromLocal(string filePath)
 	{
@@ -106,12 +103,15 @@ public class MapEditorManager : MonoBehaviour {
 
 
 	// Exporting to CSV file.
-	public void Save()
+	public void SaveMap()
 	{
-		//string saveFilePath = UnityEditor.EditorUtility.SaveFilePanel("Save csv file", "", "Saved_data.csv", "csv");
-		string saveFilePath = Application.dataPath+"/save.csv";
-		if(saveFilePath.Length > 0)
+		SaveFileDialog saveFile = new SaveFileDialog();
+		saveFile.Title = "저장 경로를 선택하세요.";
+		saveFile.Filter = "CSV File(*.csv)|*.csv";
+
+		if(saveFile.ShowDialog() == DialogResult.OK)
 		{
+			string saveFilePath = saveFile.FileName;
 			using(StreamWriter outStream = new StreamWriter(saveFilePath))
 			{
 				outStream.WriteLine(Width.ToString() + "," + Height.ToString());
@@ -133,29 +133,33 @@ public class MapEditorManager : MonoBehaviour {
 	// Loading Data
 	public void LoadMap()
 	{
-	/*
-		string loadFilePath = UnityEditor.EditorUtility.OpenFilePanel("Load csv file", "", "csv");
-		if(loadFilePath.Length == 0)
-			return;
+		OpenFileDialog openFile = new OpenFileDialog();
+		openFile.Title = "불러올 파일을 선택하세요.";
+		openFile.Filter = "CSV File(*.csv)|*.csv";
 
-		string[] readData = File.ReadAllLines(loadFilePath);	// 0 : 맵 크기. 1~ : tile의 데이터.
-		int widthSize = readData[0].ToCharArray()[0] - 48;
-		int heightSize = readData[0].ToCharArray()[2] - 48;
-
-		Width = widthSize; Height = heightSize;
-
-		// Create Tiles
-		tileUI.CreateTiles(widthSize, heightSize);
-
-		for(int i = 1; i < readData.Length; i++)	// readData의 인덱스 1 부터 tile 데이터가 시작되므로 0은 제외.
+		if(openFile.ShowDialog() == DialogResult.OK)
 		{
-			string[] temp = readData[i].Split(',');
-			for(int j = 0; j < temp.Length; j++)
+			string loadFilePath = openFile.FileName;
+
+			string[] readData = File.ReadAllLines(loadFilePath);    // 0 : 맵 크기. 1~ : tile의 데이터.
+			string[] sizeData = readData[0].Split(',');
+			int widthSize = int.Parse(sizeData[0]);
+			int heightSize = int.Parse(sizeData[1]);
+
+			Width = widthSize; Height = heightSize;
+
+			// Create Tiles
+			tileUI.CreateTiles(widthSize, heightSize);
+
+			for(int i = 1; i < readData.Length; i++)    // readData의 인덱스 1 부터 tile 데이터가 시작되므로 0은 제외.
 			{
-				tileUI.SetSpawnedTileData(j, i-1, temp[j], spriteImageData);
+				string[] temp = readData[i].Split(',');
+				for(int j = 0; j < temp.Length; j++)
+				{
+					tileUI.SetSpawnedTileData(j, i-1, temp[j], spriteImageData);
+				}
 			}
 		}
-		*/
 	}
 
 }

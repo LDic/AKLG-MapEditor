@@ -79,7 +79,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Empty
+  m_Text: 
 --- !u!114 &114282413797138610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -121,7 +121,7 @@ MonoBehaviour:
   itemIndex: 0
   typeIndex: 0
   itemSpriteImage: {fileID: 0}
-  test: {fileID: 2800000, guid: 6f77fe2f74cdc324c8af1e1cee1b54bc, type: 3}
+  text: {fileID: 114047007980944874}
 --- !u!114 &114768487669355010
 MonoBehaviour:
   m_ObjectHideFlags: 1

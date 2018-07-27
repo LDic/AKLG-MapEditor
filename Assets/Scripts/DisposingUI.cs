@@ -50,6 +50,10 @@ public class DisposingUI : MonoBehaviour {
 				// 0, 1은 초기화, 빈 칸이므로 이미지 적용에서 제외
 				if(j >= 2) {disposingItemList[i][j].SetSpriteImage(editorInstance.GetSpriteImageData(i, j-2));}
 			}
+
+			// 텍스트 설정(초기화 및 빈 칸)
+			disposingItemList[i][0].text.text = "초기화";
+			disposingItemList[i][1].text.text = "빈 칸";
 		}
 	}
 

@@ -6,6 +6,7 @@ public class ItemPrefab : MonoBehaviour {
 	public int itemIndex;			// index : 같은 분야에서의 인덱스. (0 : 초기화, 1 : 빈 칸, 2~ : 해당 이미지)
 	public int typeIndex;			// typeIdex : 0 - tile, 1 - off tile, etc.
 	public Sprite itemSpriteImage;	// Sprite Image of this Item.
+	public Text text;				// self text
 
 	private MapEditorManager editorInstance;
 
@@ -19,6 +20,7 @@ public class ItemPrefab : MonoBehaviour {
 		editorInstance.selectedItemIndex = itemIndex;
 		editorInstance.selectedTypeIndex = typeIndex;
 		editorInstance.selectedSpriteImage = itemSpriteImage;
+		MainUI.SetSelectedImage(itemSpriteImage);
 		// 초기화 버튼일 시 안내 창 띄움
 		if(itemIndex == -1)
 		{

@@ -5,14 +5,12 @@ public class NoticeUI : MonoBehaviour {
 
 	private static MapEditorManager editorInstance;
 	private static GameObject createPanel;
-	private static GameObject exportPanel;
 	private static GameObject clearPanel;
 
 	void Start()
 	{
 		editorInstance = MapEditorManager.Instance;
 		createPanel = transform.Find("CreatePanel").gameObject;
-		exportPanel = transform.Find("ExportPanel").gameObject;
 		clearPanel = transform.Find("ClearPanel").gameObject;
 	}
 
@@ -20,20 +18,16 @@ public class NoticeUI : MonoBehaviour {
 	{
 		if(index == 0)
 		{
-			exportPanel.SetActive(false);
 			clearPanel.SetActive(false);
 			createPanel.SetActive(true);
 		}
 		if(index == 1)
 		{
-			createPanel.SetActive(false);
-			clearPanel.SetActive(false);
-			exportPanel.SetActive(true);
+			editorInstance.SaveMap();
 		}
 		if(index == 2)
 		{
 			createPanel.SetActive(false);
-			exportPanel.SetActive(false);
 			clearPanel.SetActive(true);
 		}
 		if(index == 3)
@@ -45,14 +39,7 @@ public class NoticeUI : MonoBehaviour {
 	public void ClearUI()
 	{
 		createPanel.SetActive(false);
-		exportPanel.SetActive(false);
 		clearPanel.SetActive(false);
-	}
-
-	public void OnAdditionClicked()
-	{
-		editorInstance.Save();
-		ClearUI();
 	}
 
 	public void OnCreateClicked()
