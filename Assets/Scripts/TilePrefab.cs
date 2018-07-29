@@ -37,8 +37,12 @@ public class TilePrefab : MonoBehaviour {
 
 		images[typeIndex].gameObject.SetActive(true);
 		// 현재 선택된 image가 empty일 시 비활성화
-		if(editorInstance.selectedSpriteImage == null) { images[typeIndex].gameObject.SetActive(false); }
-
+		if(editorInstance.selectedSpriteImage == null) {images[typeIndex].gameObject.SetActive(false);}
+		else
+		{
+			// 크기 조절
+			images[typeIndex].gameObject.transform.localScale = new Vector3(editorInstance.selectedSpriteImage.texture.width/256f, editorInstance.selectedSpriteImage.texture.height/256f);
+		}
 	}
 
 	// 드래그 중에도 타일 배치

@@ -60,16 +60,16 @@ public class TileUI : MonoBehaviour {
 	{
 		InitializeTiles();
 
+		spawnedTiles = new TilePrefab[height][];
+
 		// Resize the ScrollView
 		tileScrollViewContent.localScale = new Vector3(1f, 1f, 1f);
 		tileScrollViewContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width*100f);
 		tileScrollViewContent.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height*100f);
 		tileScrollViewContent.SetPositionAndRotation(new Vector3(0f, height*100f), Quaternion.identity);
 
-		spawnedTiles = new TilePrefab[height][];
-
 		// Dispose tiles
-		for(int heightIndex = 0; heightIndex < height; heightIndex++)
+		for(int heightIndex = height-1; heightIndex >= 0; heightIndex--)	// 위쪽부터 생성해야 가장 아래쪽 타일이 위로 오므로 이미지가 커도 보임.
 		{
 			spawnedTiles[heightIndex] = new TilePrefab[width];
 			for(int widthIndex = 0; widthIndex < width; widthIndex++)
@@ -78,6 +78,8 @@ public class TileUI : MonoBehaviour {
 				spawnedTiles[heightIndex][widthIndex].transform.SetPositionAndRotation(new Vector3(widthIndex*100f, heightIndex*100f), Quaternion.identity);
 			}
 		}
+
+		tileScrollViewContent.localPosition = new Vector3(0f, 0f);
 	}
 
 	// Get spawnedTiles' Data for Save
@@ -114,6 +116,8 @@ public class TileUI : MonoBehaviour {
 			{
 				spawnedTiles[heightIndex][widthIndex].images[i].sprite = spriteImageData[i][tempItemIndex - 1];
 				spawnedTiles[heightIndex][widthIndex].images[i].gameObject.SetActive(true);
+				// 크기 조절
+				spawnedTiles[heightIndex][widthIndex].images[i].gameObject.transform.localScale = new Vector3(spriteImageData[i][tempItemIndex - 1].texture.width/256f, spriteImageData[i][tempItemIndex - 1].texture.height/256f);
 			}
 		}
 	}

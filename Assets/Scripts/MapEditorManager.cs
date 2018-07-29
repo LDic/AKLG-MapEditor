@@ -74,15 +74,15 @@ public class MapEditorManager : MonoBehaviour {
 
 		for(int i = 0; i < filePathList.Length; i++)
 		{
-			string[] temp = Directory.GetFiles(filePathList[i]);
-			spriteImageData[i] = new Sprite[temp.Length/2]; // GetFiles()가 .meta 파일까지 포함하므로 제외하기 위해 2로 나눠 .png 개수만큼만 할당.
+			string[] temp = Directory.GetFiles(filePathList[i], "*.png");
+			spriteImageData[i] = new Sprite[temp.Length];
 
 			for(int j = 0; j < temp.Length; j++)
 			{
 				if(!temp[j].EndsWith(".meta"))
 				{
 					Texture2D tempTexture = GetTextureFromLocal(temp[j]);
-					spriteImageData[i][j/2] = Sprite.Create(tempTexture, new Rect(0f, 0f, (float)tempTexture.width, (float)tempTexture.height), Vector2.zero);
+					spriteImageData[i][j] = Sprite.Create(tempTexture, new Rect(0f, 0f, (float)tempTexture.width, (float)tempTexture.height), Vector2.zero);
 				}
 			}
 		}
