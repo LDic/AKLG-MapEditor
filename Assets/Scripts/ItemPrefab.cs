@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class ItemPrefab : MonoBehaviour {
 
-	public int itemIndex;			// index : 같은 분야에서의 인덱스. (0 : 초기화, 1 : 빈 칸, 2~ : 해당 이미지)
+	public int itemIndex;			// index : 같은 분야에서의 인덱스. (-1 : 초기화, 0 : 빈 칸, 1~ : 해당 이미지)
 	public int typeIndex;			// typeIdex : 0 - tile, 1 - off tile, etc.
 	public Sprite itemSpriteImage;	// Sprite Image of this Item.
 	public Text text;				// self text
