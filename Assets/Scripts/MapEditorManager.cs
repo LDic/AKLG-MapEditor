@@ -85,11 +85,21 @@ public class MapEditorManager : MonoBehaviour {
 			gotImageNumber[i] = new int[temp.Length];
 			spriteImageData[i] = new Sprite[temp.Length];
 
+			// Sort gotImageNumber & temp array
+			for(int j = 0; j < temp.Length; j++)	// 먼저 gotImageNumber 배열 데이터 초기화
+			{
+				string str = temp[j].Replace(filePathList[i], "");
+				int trace = 0;
+				while(str.ToCharArray()[trace] != ' ' && str.ToCharArray()[trace] != '.') {trace++;}
+				gotImageNumber[i][j] = int.Parse(str.Substring(1, trace-1));	// 현재 str이 "/~" 이므로 맨 처음 글자 무시하고 숫자만 읽음.
+			}
+			SortTextureData(gotImageNumber[i], temp);	// gotImageNumber, temp 배열 파일 이름 숫자 오름차순으로 정렬
+			
+			// Set spriteImageData
 			for(int j = 0; j < temp.Length; j++)
 			{
 				Texture2D tempTexture = GetTextureFromLocal(temp[j]);
 				spriteImageData[i][j] = Sprite.Create(tempTexture, new Rect(0f, 0f, (float)tempTexture.width, (float)tempTexture.height), Vector2.zero);
-				gotImageNumber[i][j] = int.Parse(temp[j].Replace(filePathList[i], "").Substring(1, 3));	// 001 이런 식으로 변환 후 숫자로 변환.
 			}
 		}
 	}
@@ -105,6 +115,31 @@ public class MapEditorManager : MonoBehaviour {
 			tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
 		}
 		return tex;
+	}
+	private void SortTextureData(int[] gotImageNumber, string[] temp)	// Selection Sort
+	{
+		for(int i = 0; i < gotImageNumber.Length; i++)
+		{
+			int currentMin = gotImageNumber[i];
+			int currentIndex = i;
+			for(int j = i; j < gotImageNumber.Length; j++)
+			{	
+				if(gotImageNumber[j] < currentMin)
+				{
+					currentMin = gotImageNumber[j];
+					currentIndex = j;
+				}
+			}
+			if(currentIndex != i)
+			{
+				gotImageNumber[currentIndex] = gotImageNumber[i];
+				gotImageNumber[i] = currentMin;
+			}
+			
+			string str = temp[currentIndex];
+			temp[currentIndex] = temp[i];
+			temp[i] = str;
+		}
 	}
 
 
