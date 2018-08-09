@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class TileUI : MonoBehaviour {
 
@@ -8,6 +7,16 @@ public class TileUI : MonoBehaviour {
 	public TilePrefab tile;
 
 	private TilePrefab[][] spawnedTiles;
+	private GameObject scrollView;
+	private Vector3 scrollViewMinPos, scrollViewMaxPos;
+
+	void Start()
+	{
+		// scrollView 및 scrollView 영역 범위 초기화
+		scrollView = transform.Find("Scroll View").gameObject;
+		scrollViewMinPos = scrollView.transform.position - new Vector3(scrollView.GetComponent<RectTransform>().rect.width/2, scrollView.GetComponent<RectTransform>().rect.height/2);
+		scrollViewMaxPos = scrollView.transform.position + new Vector3(scrollView.GetComponent<RectTransform>().rect.width/2, scrollView.GetComponent<RectTransform>().rect.height/2);
+	}
 
 	public void ClearDisposedImages(int typeIndex)
 	{
@@ -66,8 +75,6 @@ public class TileUI : MonoBehaviour {
 		tileScrollViewContent.transform.localScale = new Vector3(1f, 1f, 1f);
 		tileScrollViewContent.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0f, width*100f);
 		tileScrollViewContent.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 0f, height*100f);
-		//tileScrollViewContent.SetSizeWithCurrentAnchors(0, width*100f);
-		//tileScrollViewContent.SetSizeWithCurrentAnchors(0, height*100f);
 
 		// Dispose tiles
 		float xOffset = 55.5f;
@@ -157,20 +164,25 @@ public class TileUI : MonoBehaviour {
 		}
 	}
 
-	// Update is called once per frame
-	void Update () {
-		
+	void Update()
+	{
 		// Zoom In
 		if(Input.mouseScrollDelta.y > 0f)
 		{
-			tileScrollViewContent.GetComponent<RectTransform>().localScale += adjustingSize;
-			tileScrollViewContent.GetComponent<RectTransform>().position = new Vector3(50f, 70.5f);
+			if(Input.mousePosition.x > scrollViewMinPos.x && Input.mousePosition.x < scrollViewMaxPos.x && Input.mousePosition.y > scrollViewMinPos.y && Input.mousePosition.y < scrollViewMaxPos.y)
+			{
+				tileScrollViewContent.GetComponent<RectTransform>().localScale += adjustingSize;
+				tileScrollViewContent.GetComponent<RectTransform>().position = new Vector3(50f, 70.5f);
+			}
 		}
 		// Zoom Out
 		if(Input.mouseScrollDelta.y < 0f)
 		{
-			tileScrollViewContent.GetComponent<RectTransform>().localScale -= adjustingSize;
-			tileScrollViewContent.GetComponent<RectTransform>().position = new Vector3(50f, 70.5f);
+			if(Input.mousePosition.x > scrollViewMinPos.x && Input.mousePosition.x < scrollViewMaxPos.x && Input.mousePosition.y > scrollViewMinPos.y && Input.mousePosition.y < scrollViewMaxPos.y)
+			{
+				tileScrollViewContent.GetComponent<RectTransform>().localScale -= adjustingSize;
+				tileScrollViewContent.GetComponent<RectTransform>().position = new Vector3(50f, 70.5f);
+			}
 		}
 	}
 

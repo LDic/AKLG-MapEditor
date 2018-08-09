@@ -52,4 +52,16 @@ public class TilePrefab : MonoBehaviour {
 			DisposeImage();
 	}
 
+	// 우클릭 시 빈 칸 배치
+	public void IsRightClicked()
+	{
+		if(Input.GetMouseButton(1))
+		{
+			int typeIndex = editorInstance.selectedTypeIndex;
+			disposedItems[typeIndex] = 0;
+			images[typeIndex].sprite = null;
+			images[typeIndex].gameObject.SetActive(false);
+		}
+	}
+
 }

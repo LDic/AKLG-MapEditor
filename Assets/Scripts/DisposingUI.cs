@@ -101,6 +101,5 @@ public class DisposingUI : MonoBehaviour {
 			}
 		}
 	}
-
 }
 
